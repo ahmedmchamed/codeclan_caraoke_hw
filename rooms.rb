@@ -1,15 +1,16 @@
 class Rooms
 
+    attr_reader :room_name, :playlist, :entry_fee
 
-    def initialize(room_name, guests_in_room = [], playlist = [], waiting_list = [], entry_fee)
+    def initialize(room_name, guests_in_room = [], playlist = [], entry_fee)
         @room_name = room_name
         @guests_in_room = guests_in_room
         @playlist = playlist
-        @waiting_list = waiting_list
         @entry_fee = entry_fee
-        @groups_waiting_per_room = Hash.new(0)
     end
 
-
+    def get_guests_in_room()
+        return @guests_in_room
+    end
 
 end
