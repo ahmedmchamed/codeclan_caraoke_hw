@@ -1,10 +1,9 @@
 class Admin
 
-    attr_reader
-
-    def initialize(engaged_rooms = {}, groups_waiting_for_room = {})
-        @engaged_rooms = engaged_rooms
-        @groups_waiting_for_room = groups_waiting_for_room
+    def initialize(engaged_rooms_status = {})
+        @engaged_rooms_status = engaged_rooms_status
     end
+
+    
 
 end
