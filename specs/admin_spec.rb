@@ -49,6 +49,17 @@ class TestAdmin < MiniTest::Test
         @admin_login = Admin.new(@engaged_rooms_status)
     end
 
+    def test_can_deduct_room_fee_from_individual_guest_in_group()
+        #First put a group in a room
+        # @admin_login.assign_guest_to_group(@guest1)
+        # @admin_login.assign_guest_to_group(@guest2)
+        room_group = [@guest1, @guest2] #@admin_login.return_group_of_guests()
+        #Admin deducts room fee
+        @admin_login.deduct_room_entry_fee_from_group(@regular_room, room_group)
+        assert_equal(25, @guest1.get_wallet_amount())
+        assert_equal(50, @guest2.get_wallet_amount())
+    end
+
     def test_can_return_group_of_guests()
         #Putting individual guests in their group
         @admin_login.assign_guest_to_group(@guest1)

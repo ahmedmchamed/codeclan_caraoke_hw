@@ -11,6 +11,30 @@ class Admin
         @group_of_guests = []       
     end
 
+    def deduct_room_entry_fee_from_group(room, group)
+        #Evaluate funds available from guests
+        guest_funds_available = group.reduce(0) do |total_funds, guest|
+            total_funds + guest.get_wallet_amount()
+        end
+        #Exit the function if funds unavailable from entire group
+        # return "Can afford" if guest_funds_available > room.entry_fee()
+        return if guest_funds_available < room.entry_fee()
+
+        #Trying to deduct the fee amount from just one of
+        #the members of a group, assuming group size potentially unknown.
+        counter = 0
+        while counter <= group.size()
+            if group[counter].get_wallet_amount() >= room.entry_fee()
+                #Use Guests method to deduct fee
+                group[counter].deduct_room_fee_amount(room.entry_fee())
+                return
+            end
+            counter += 1
+        end
+
+        return "Could not deduct room fee"
+    end
+
     def assign_guest_to_group(guest)
         @group_of_guests.push(guest)
     end
@@ -53,27 +77,6 @@ class Admin
         if room.get_guests_in_room() == :room_vacant
             @engaged_rooms_status[room] = nil
         end
-    end
-
-    def deduct_room_entry_fee_from_group(room, group)
-        #Calculate total amount of funds from guests
-        guest_funds_available = group.reduce(0) { |total_funds, guest|
-            total_funds + guest.get_wallet_amount()
-        }
-        #Exit the function if funds unavailable from entire group
-        return if guest_funds_available < room.entry_fee()
-
-        #Trying to deduct the fee amount from just one of
-        #the members of a group, assuming I also don't know
-        #the group size
-        for index in group.size()
-            if group[index].get_wallet_amount() >= room.entry_fee()
-                group[index].get_wallet_amount() -= room.entry_fee()
-                #return
-            end
-        end
-
-        # return nil
     end
 
 end
