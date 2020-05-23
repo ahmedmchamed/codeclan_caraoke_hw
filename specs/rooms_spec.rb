@@ -13,6 +13,8 @@ class TestRooms < MiniTest::Test
 
     def setup()
 
+
+
         @song1 = Songs.new("Bohemian Rhapsody", "Queen", 360, false)
         @song2 = Songs.new("Introdiction", "Scroobius Pip", 210, true)
         @song3 = Songs.new("Never Gonna Give You Up", "Rick Astley", 210, false)
@@ -59,6 +61,7 @@ class TestRooms < MiniTest::Test
     end
 
     def test_create_playlist_suitable_for_family_room_and_return_playlist()
+        #Admin makes sure a specific playlist is created for this room
         @admin_login.create_non_explicit_playlist_for_room(@family_room, @all_songs)
         non_explicit_songs = [@song1, @song3, @song4]
         assert_equal(non_explicit_songs, @family_room.return_songs_in_room_playlist())
@@ -72,6 +75,7 @@ class TestRooms < MiniTest::Test
         @admin_login.assign_guest_to_group(@parent_or_guardian2)
         @admin_login.assign_guest_to_group(@child1)
         @admin_login.assign_guest_to_group(@child2)
+        #Assign created group to a variable using the admin
         family_group = @admin_login.return_group_of_guests()
 
         #Group gets assigned to the room
@@ -88,6 +92,7 @@ class TestRooms < MiniTest::Test
         @admin_login.assign_guest_to_group(@parent_or_guardian2)
         @admin_login.assign_guest_to_group(@child1)
         @admin_login.assign_guest_to_group(@child2)
+        #Assign created group to a variable using the admin
         family_group = @admin_login.return_group_of_guests()
         @family_room.assign_group_of_guests_to_room(family_group)
 
@@ -111,6 +116,13 @@ class TestRooms < MiniTest::Test
 
         result = @regular_room.get_total_playlist_time()
         assert_equal(1140, result)
+    end
+
+    def test_informing_room_of_time_limit()
+        #Create a random playlist for one of the rooms
+        @geriatrics_room.create_playlist_for_room(@all_songs)
+        result = @geriatrics_room.inform_room_of_time_limit()
+        assert_equal("Your playlist will set you past the time limit", result)
     end
 
 

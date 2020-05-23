@@ -55,4 +55,25 @@ class Admin
         end
     end
 
+    def deduct_room_entry_fee_from_group(room, group)
+        #Calculate total amount of funds from guests
+        guest_funds_available = group.reduce(0) { |total_funds, guest|
+            total_funds + guest.get_wallet_amount()
+        }
+        #Exit the function if funds unavailable from entire group
+        return if guest_funds_available < room.entry_fee()
+
+        #Trying to deduct the fee amount from just one of
+        #the members of a group, assuming I also don't know
+        #the group size
+        for index in group.size()
+            if group[index].get_wallet_amount() >= room.entry_fee()
+                group[index].get_wallet_amount() -= room.entry_fee()
+                #return
+            end
+        end
+
+        # return nil
+    end
+
 end

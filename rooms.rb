@@ -49,7 +49,17 @@ class Rooms
          return total_playlist_time = @playlist.reduce(0) do |total_music_time, song| 
             total_music_time + song.song_length()
          end
+    end
 
+    def inform_room_of_time_limit()
+        #Assign the result (seconds) of the total playlist time function
+        room_playlist_time = get_total_playlist_time()
+
+        if room_playlist_time > @time_limit
+            return "Your playlist will set you past the time limit"
+        else
+            return "You'll have time to spare with your current playlist"
+        end
     end
 
 
