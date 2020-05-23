@@ -1,7 +1,13 @@
 class Admin
 
+    attr_reader :engaged_rooms_status
+
     def initialize(engaged_rooms_status = {})
+        #Hash to contain each room as a key, and whether they
+        #are engaged with guests or not as a value
         @engaged_rooms_status = engaged_rooms_status
+        #Group to hold individual guests to assign to
+        #each room
         @group_of_guests = []       
     end
 
@@ -31,30 +37,20 @@ class Admin
         end
     end
 
-    # def return_group_in_room(room_name)
-    #     if @engaged_rooms_status[room_name] ==  nil
-    #         return "Room is vacant"
-    #     else
-    #         return @engaged_rooms_status[room_name]
-    #     end
-    # end
-
-    def create_non_explicit_playlist(list_of_songs)
-        playlist = list_of_songs.find_all { |song| song.explicit_or_not() == false }
-        return playlist
+    def create_non_explicit_playlist_for_room(room, list_of_songs)
+        #Iterate through all songs and remove ones with 'false' explicit label
+        non_explicit_playlist = list_of_songs.find_all { |song| song.explicit_or_not() == false }
+        room.create_playlist_for_room(non_explicit_playlist)
     end
 
-    def create_explicit_playlist(list_of_songs)
-        playlist = list_of_songs.find_all { |song| song.explicit_or_not() == true }
-        return playlist
-    end
-
-    def remove_guest_from_group_in_room(guest, room)
-        @engaged_rooms_status[room].delete(guest)
+    def create_explicit_playlist_for_room(room, list_of_songs)
+        #Iterate through all songs and remove ones with 'true' explicit label
+        explicit_playlist = list_of_songs.find_all { |song| song.explicit_or_not() == true }
+        room.create_playlist_for_room(explicit_playlist)
     end
 
     def reset_room_if_empty(room)
-        if @engaged_rooms_status[room].empty?()
+        if room.get_guests_in_room() == :room_vacant
             @engaged_rooms_status[room] = nil
         end
     end

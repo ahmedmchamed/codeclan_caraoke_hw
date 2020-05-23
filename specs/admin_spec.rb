@@ -61,21 +61,69 @@ class TestAdmin < MiniTest::Test
 
     def test_can_return_vacant_room_confirmation()
         result = @regular_room.get_guests_in_room()
-        assert_equal("Room is vacant", result)
+
+        assert_equal(:room_vacant, result)
     end
 
-    def test_can_assign_group_to_room()
+    def test_can_assign_group_to_empty_room()
+        #Create group of guests
         @admin_login.assign_guest_to_group(@guest4)
         @admin_login.assign_guest_to_group(@guest5)
         @admin_login.assign_guest_to_group(@guest6)
         guest_group = @admin_login.return_group_of_guests()
-
+        #Assign that group to an empty room
         @admin_login.assign_group_to_room(@regular_room, @waiting_room, guest_group)
-        assert_equal(true, @engaged_rooms_status[@regular_room])
+
+        assert_equal(true, @admin_login.engaged_rooms_status[@regular_room])
         assert_equal(guest_group, @regular_room.get_guests_in_room())
     end
 
+    def test_can_assign_guests_to_waiting_room_if_another_room_is_full()
+        #Create first test group
+        @admin_login.assign_guest_to_group(@guest1)
+        @admin_login.assign_guest_to_group(@guest2)
+        @admin_login.assign_guest_to_group(@guest3)
+        first_guest_group = @admin_login.return_group_of_guests()
+        #Assign first test group to regular room
+        @admin_login.assign_group_to_room(@regular_room, @waiting_room, first_guest_group)
+        #Create second test group to test if they can go to the waiting room for now
+        second_guest_group = [@guest4, @guest5, @guest6]
+        @admin_login.assign_group_to_room(@regular_room, @waiting_room, second_guest_group)
 
+        assert_equal(true, @admin_login.engaged_rooms_status[@waiting_room])
+        assert_equal(second_guest_group, @waiting_room.get_guests_in_room())
+    end
+
+    def test_creating_a_non_explicit_playlist_for_a_room()
+        @admin_login.create_non_explicit_playlist_for_room(@waiting_room, @all_songs)
+        non_explicit_songs = [@song1, @song2, @song4]
+        assert_equal(non_explicit_songs, @waiting_room.return_songs_in_room_playlist())
+    end
+
+    def test_creating_an_explicit_playlist_for_a_room()
+        @admin_login.create_explicit_playlist_for_room(@regular_room, @all_songs)
+        explicit_songs = [@song3, @song5]
+        assert_equal(explicit_songs, @regular_room.return_songs_in_room_playlist())
+    end
+
+    def test_resetting_a_room_after_all_guests_leave()
+        #First add some guests to a room
+        @admin_login.assign_guest_to_group(@guest1)
+        @admin_login.assign_guest_to_group(@guest2)
+        @admin_login.assign_guest_to_group(@guest3)
+        guest_group = @admin_login.return_group_of_guests()
+
+        @admin_login.assign_group_to_room(@regular_room, @waiting_room, guest_group)
+
+        #Then remove those guests to test if the room can be 
+        #reset to its default value
+        @regular_room.remove_guest_from_group_in_room(@guest1)
+        @regular_room.remove_guest_from_group_in_room(@guest2)
+        @regular_room.remove_guest_from_group_in_room(@guest3)
+
+        @admin_login.reset_room_if_empty(@regular_room)
+        assert_equal(nil, @admin_login.engaged_rooms_status[@regular_room])
+    end
 
 
 end
