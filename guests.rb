@@ -15,7 +15,7 @@ class Guests
         return @wallet
     end
 
-    def deduct_room_fee_amount(amount)
+    def deduct_fees_amount(amount)
         @wallet -= amount
     end
 

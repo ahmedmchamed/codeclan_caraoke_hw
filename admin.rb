@@ -17,7 +17,6 @@ class Admin
             total_funds + guest.get_wallet_amount()
         end
         #Exit the function if funds unavailable from entire group
-        # return "Can afford" if guest_funds_available > room.entry_fee()
         return if guest_funds_available < room.entry_fee()
 
         #Trying to deduct the fee amount from just one of
@@ -26,7 +25,7 @@ class Admin
         while counter <= group.size()
             if group[counter].get_wallet_amount() >= room.entry_fee()
                 #Use Guests method to deduct fee
-                group[counter].deduct_room_fee_amount(room.entry_fee())
+                group[counter].deduct_fees_amount(room.entry_fee())
                 return
             end
             counter += 1
@@ -44,20 +43,19 @@ class Admin
     end
 
     def assign_group_to_room(room, waiting_room, group)
-        #Assuming each guests in the group has booked the
-        #same room
+        #Assuming each guests in the group has booked the same room
         return "Incorrect room assignment" if room.room_name() != group[0].chosen_room()
-        #If there's no one in the room, then assign group
-        #to that room
+        #If there's no one in the room, then assign group to that room
         if @engaged_rooms_status[room] == nil
             room.assign_group_of_guests_to_room(group)
+            #Switch room value to indicate it's engaged
             @engaged_rooms_status[room] = true
-        #If the room is not empty, put group in waiting room
+        #If the room is not empty, put group in the waiting room
         elsif @engaged_rooms_status[room] != nil
             waiting_room.assign_group_of_guests_to_room(group)
             @engaged_rooms_status[waiting_room] = true
         else
-            return
+            return "Group room assignment failed"
         end
     end
 

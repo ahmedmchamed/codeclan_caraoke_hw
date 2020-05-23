@@ -12,8 +12,6 @@ class TestRooms < MiniTest::Test
 
     def setup()
 
-
-
         @song1 = Songs.new("Bohemian Rhapsody", "Queen", 360, false)
         @song2 = Songs.new("Introdiction", "Scroobius Pip", 210, true)
         @song3 = Songs.new("Never Gonna Give You Up", "Rick Astley", 210, false)
@@ -67,7 +65,7 @@ class TestRooms < MiniTest::Test
     end
 
     #Note: I'm not sure if this test is irrelevant since it's also
-    #kind of done in the admin spec. Wrote here for now to practice.
+    #kind of done in the admin spec. Wrote anyway just in case.
     def test_can_assign_group_to_room()
         #Admin creates group for family room
         @admin_login.assign_guest_to_group(@parent_or_guardian1)
@@ -84,7 +82,7 @@ class TestRooms < MiniTest::Test
     end
 
     #Note: I'm not sure if this test is irrelevant here since it's also
-    #kind of done in the admin spec. Wrote here for now to practice.
+    #kind of done in the admin spec. Wrote anyway just in case.
     def test_can_remove_guest_from_room()
         #Same as preceding test for the following lines
         @admin_login.assign_guest_to_group(@parent_or_guardian1)
