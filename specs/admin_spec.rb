@@ -59,12 +59,6 @@ class TestAdmin < MiniTest::Test
         assert_equal([@guest1, @guest2, @guest3], result)
     end
 
-    def test_can_return_vacant_room_confirmation()
-        result = @regular_room.get_guests_in_room()
-
-        assert_equal(:room_vacant, result)
-    end
-
     def test_can_assign_group_to_empty_room()
         #Create group of guests
         @admin_login.assign_guest_to_group(@guest4)
@@ -122,7 +116,7 @@ class TestAdmin < MiniTest::Test
         @regular_room.remove_guest_from_group_in_room(@guest3)
 
         @admin_login.reset_room_if_empty(@regular_room)
-        assert_equal(nil, @admin_login.engaged_rooms_status[@regular_room])
+        assert_nil(nil, @admin_login.engaged_rooms_status[@regular_room])
     end
 
 

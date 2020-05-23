@@ -15,4 +15,12 @@ class Guests
         return @wallet
     end
 
+    def can_guests_afford_room_entry_fee(group)
+        #Loop through each guest in a group and check if they have
+        #enough funds to book a room
+        guests_available_funds = group.reduce(0) do |total_amount, guest|
+            total_amount + guest.wallet()
+        end
+    end
+
 end

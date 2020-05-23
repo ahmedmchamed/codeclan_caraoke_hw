@@ -6,7 +6,7 @@ class Songs
     def initialize(name, artist, song_length, explicit_or_not)
         @name = name
         @artist = artist
-        @song_length = song_length
+        @song_length = song_length #time in seconds
         @explicit_or_not = explicit_or_not
     end
 
