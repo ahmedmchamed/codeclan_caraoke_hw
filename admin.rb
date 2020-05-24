@@ -28,6 +28,7 @@ class Admin
                 group[counter].deduct_fees_amount(room.entry_fee())
                 return
             end
+            #Move to the next guest if last guest did not have enough funds
             counter += 1
         end
 
@@ -43,7 +44,7 @@ class Admin
     end
 
     def assign_group_to_room(room, waiting_room, group)
-        #Assuming each guests in the group has booked the same room
+        #Assuming each guest in the group has booked the same room
         return "Incorrect room assignment" if room.room_name() != group[0].chosen_room()
         #If there's no one in the room, then assign group to that room
         if @engaged_rooms_status[room] == nil

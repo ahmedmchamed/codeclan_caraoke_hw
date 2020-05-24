@@ -78,7 +78,7 @@ class TestAdmin < MiniTest::Test
         guest_group = @admin_login.return_group_of_guests()
         #Assign that group to an empty room
         @admin_login.assign_group_to_room(@regular_room, @waiting_room, guest_group)
-
+        #Test regular room is now engaged, and return guests from the room
         assert_equal(true, @admin_login.engaged_rooms_status[@regular_room])
         assert_equal(guest_group, @regular_room.get_guests_in_room())
     end
@@ -94,7 +94,7 @@ class TestAdmin < MiniTest::Test
         #Create second test group to test if they can go to the waiting room for now
         second_guest_group = [@guest4, @guest5, @guest6]
         @admin_login.assign_group_to_room(@regular_room, @waiting_room, second_guest_group)
-
+        #Test waiting room is now engaged, and return guests from the room
         assert_equal(true, @admin_login.engaged_rooms_status[@waiting_room])
         assert_equal(second_guest_group, @waiting_room.get_guests_in_room())
     end
